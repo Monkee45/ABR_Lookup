@@ -1,5 +1,5 @@
 require "savon"
-# Energy Australia = 99 086 014 968
+# The ABN for Energy Australia = 99 086 014 968
 
 abn='99086014968'
 guid = "890b3a4c-7267-4c8f-8c43-825a349a5e87"
@@ -15,7 +15,7 @@ client = Savon.client(wsdl: "http://www.abn.business.gov.au/abrxmlsearch/ABRXMLS
 response = client.call(:abr_search_by_abn, message: { authenticationGuid: guid, searchString: abn, includeHistoricalDetails: "N" })
 
 result = response.body[:abr_search_by_abn_response][:abr_payload_search_results][:response][:business_entity]
-# puts response
+
 puts result[:main_name][:organisation_name]
 puts "Main Trading Name: #{result[:main_trading_name][:organisation_name]}"
 puts "ABN Number: #{result[:abn][:identifier_value]}"
