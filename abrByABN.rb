@@ -1,6 +1,6 @@
 require "savon"
 # The ABN for Energy Australia = 99 086 014 968
-# This is based on new Branch work
+
 # Just updating this one line
 abn='99086014968'
 guid = "890b3a4c-7267-4c8f-8c43-825a349a5e87"
