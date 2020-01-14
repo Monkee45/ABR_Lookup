@@ -1,6 +1,13 @@
 require "savon"
+<<<<<<< HEAD
 
 abn='99086014968' # Energy Australia
+=======
+# The ABN for Energy Australia = 99 086 014 968
+
+# Just updating this one line
+abn='99086014968'
+>>>>>>> 04a1633528993751c4e8dd632489a485d9f4444d
 guid = "890b3a4c-7267-4c8f-8c43-825a349a5e87"
 
 puts "This is the ABN we are looking for #{abn}"
