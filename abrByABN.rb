@@ -1,4 +1,5 @@
 require "savon"
+
 # The ABN for Energy Australia = 99 086 014 968
 # This is based on new Branch work
 # Just updating this one line
@@ -23,6 +24,12 @@ if abn == 0
 	abn = '99086014968'
 end
 
+
+# Energy Australia = 99 086 014 968
+# new comment line test update of github repo
+
+abn='99086014968'
+
 guid = "890b3a4c-7267-4c8f-8c43-825a349a5e87"
 
 puts "This is the ABN we are looking for #{abn}"
@@ -32,7 +39,10 @@ client = Savon.client(wsdl: "http://www.abn.business.gov.au/abrxmlsearch/ABRXMLS
 response = client.call(:abr_search_by_abn, message: { authenticationGuid: guid, searchString: abn, includeHistoricalDetails: "N" })
 
 result = response.body[:abr_search_by_abn_response][:abr_payload_search_results][:response][:business_entity]
+
 puts "\n\n"
+
+# puts response
 puts result[:main_name][:organisation_name]
 puts "Main Trading Name: #{result[:main_trading_name][:organisation_name]}"
 puts "ABN Number: #{result[:abn][:identifier_value]}"
