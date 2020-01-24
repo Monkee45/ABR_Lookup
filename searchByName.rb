@@ -9,6 +9,7 @@ client = Savon.client(wsdl: "http://www.abn.business.gov.au/abrxmlsearch/ABRXMLS
 name_record = client.call(:abr_search_by_name_simple_protocol, message: { name: cname, authenticationGuid: guid })
 name_search_result = name_record.body[:abr_search_by_name_simple_protocol_response][:abr_payload_search_results][:response][:search_results_list][:search_results_record]
 # pp name_search_result
+
 # Display same/similar to https://abr.business.gov.au/ when doing a "name" search
 # name_search_result is an array of hashes
 # iterate through the array and then iterate through the hash key-value pairs
