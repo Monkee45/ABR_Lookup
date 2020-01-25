@@ -7,7 +7,6 @@ guid = "890b3a4c-7267-4c8f-8c43-825a349a5e87"
 
 # client_options = { :wsdl => "http://www.abn.business.gov.au/abrxmlsearch/ABRXMLSearch.asmx?WSDL" }
 client = Savon.client(wsdl: "http://www.abn.business.gov.au/abrxmlsearch/ABRXMLSearch.asmx?WSDL")
-
 # searching by ABN number
 abn_record = client.call(:abr_search_by_abn, message: { authenticationGuid: guid, searchString: abn, includeHistoricalDetails: "N" })
 
