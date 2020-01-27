@@ -4,33 +4,30 @@ require "savon"
 # Just updating this one line
 class ABN
 	attr_reader :value
-	attr_reader :search_type
+	attr_reader :rec_count
 
-	def initialize(val=0, type="Number")
+	def initialize(val = 0, count = 0)
 		@value = val
-		@search_type = type
+		@rec_count = count
 	end
 
 	def load_search
 			print "\nEnter the ABN you are searching for: "
 			@value = gets.chomp
-			if @value =~ /^\d{11}$/
-				@search_type = "Number"
-			else
-				@search_type = "Name"
-			end
 	end
 
 	def search_abr
 		guid = "890b3a4c-7267-4c8f-8c43-825a349a5e87"
 		client = Savon.client(wsdl: "http://www.abn.business.gov.au/abrxmlsearch/ABRXMLSearch.asmx?WSDL")
 
-		if @search_type == "Number"
+		if @value =~ /^\d{11}$/
 			response = client.call(:abr_search_by_abn, message: { authenticationGuid: guid, searchString: @value, includeHistoricalDetails: "N" })
 			response.body[:abr_search_by_abn_response][:abr_payload_search_results][:response][:business_entity]
 		else
 			response = client.call(:abr_search_by_name_simple_protocol, message: { name: @value, authenticationGuid: guid })
+			@rec_count = response.body[:abr_search_by_name_simple_protocol_response][:abr_payload_search_results][:response][:search_results_list][:number_of_records]
 			response.body[:abr_search_by_name_simple_protocol_response][:abr_payload_search_results][:response][:search_results_list][:search_results_record]
+
 		end
 
 	end
