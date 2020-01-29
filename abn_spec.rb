@@ -1,48 +1,36 @@
-require_relative 'abnClass'
+require 'stringio'
+require_relative 'abnClass' 
 
 describe ABN do
 
-  it "starts with a value of zero (0)" do
-    companyX = ABN.new
-    expect(companyX.value).to eq(0)
+	context 'with input equal to an 11-digit number' do
+		it 'asks for input only once' do
+		output = ask_for_abn_input("97000098162")
+ 		expect(output).to eq "\nEnter the ABN or Name you are searching for: "
+		end
+	end
+ 
+	context 'with no input' do
+		it 'asks repeatedly, until an entry is provided' do
+			output = ask_for_abn_input('','Time')
+ 		expect(output).to eq "\nEnter the ABN or Name you are searching for: Invalid. Try again: Enter the ABN or Name you are searching for: "
+		end
+	end
+ 
+	context 'with entry of anything other than an 11 digit number' do
+		it "knows that its a 'name' search if an 11 digit number is not entered" do
+			companyX = ABN.new
+			output = ask_for_abn_input('222222')
+			expect(companyX.rec_count).not_to be '0'
+		 end
+	end 
+
+ 
+  def ask_for_abn_input(*input_string)
+    input = StringIO.new(input_string.join("\n") + "\n")
+    output = StringIO.new
+     example = ABN.new(input: input, output: output)
+    expect(example.get_search_string).to be true
+    output.string
   end
-
-  it "accepts a value to initialize its parameter" do
-    companyX = ABN.new(50)
-    expect(companyX.value).to eq(50)
-  end
-
-
-  it "sets the abn value if the user inputs an 11 digit number " do
-    original_stdout = $stdout
-    $stdout = File.open(File::NULL, "w")
-    companyX = ABN.new
-    allow(companyX).to receive(:gets).and_return("97000098162\n")
-    status = companyX.load_search
-    expect(companyX.value).to eq("97000098162")
-    $stdout = original_stdout
-  end
-
-  it "knows that its a 'name' search if an 11 digit number is not entered" do
-    original_stdout = $stdout
-    $stdout = File.open(File::NULL, "w")
-    companyX = ABN.new
-    allow(companyX).to receive(:gets).and_return("222222\n", "q\n")
-    status = companyX.load_search
-#    expect(companyX.value).to eq(0)
-    expect(companyX.search_type).to eq("Name")
-    $stdout = original_stdout
-  end
-
-  it "web service returns an Hash" do
-    original_stdout = $stdout
-    $stdout = File.open(File::NULL, "w")
-    companyX = ABN.new
-    allow(companyX).to receive(:gets).and_return("97000098162\n", "q\n")
-    status = companyX.load_search
-    abn_details = companyX.search_abr
-    expect(abn_details).to be_a(Hash)
-    $stdout = original_stdout
-  end
-
 end

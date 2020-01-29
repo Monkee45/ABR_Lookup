@@ -6,17 +6,23 @@ class ABN
 	attr_reader :value
 	attr_reader :rec_count
 
-	def initialize(val = 0, count = 0)
-		@value = val
-		@rec_count = count
+	def initialize(input: $stdin, output: $stdout)
+		@input = input
+		@output = output
+		@value = nil
+		@rec_count = 0
 	end
 
-	def load_search
-			print "\nEnter the ABN you are searching for: "
-			@value = gets.chomp
+	def get_search_string
+		@output.print "\nEnter the ABN or Name you are searching for: "
+		loop do
+			@value = @input.gets.chomp
+			return true if not @value.empty? 
+			@output.print "Invalid. Try again: Enter the ABN or Name you are searching for: "
+		end
 	end
 
-	def search_abr
+	def submit_search_request
 		guid = "890b3a4c-7267-4c8f-8c43-825a349a5e87"
 		client = Savon.client(wsdl: "http://www.abn.business.gov.au/abrxmlsearch/ABRXMLSearch.asmx?WSDL")
 
@@ -32,7 +38,7 @@ class ABN
 
 	end
 
-	def output_abn_search (abn_result)
+	def display_single_result (abn_result)
 		abn_result.each do |key, value|
 		  case key
 		    when :abn
@@ -56,7 +62,7 @@ class ABN
 		end
 	end
 
-	def output_name_search (abn_result)
+	def display_multi_result (abn_result)
 		abn_result.each do |entry|
 		  entry.each do |key, value|
 		    case key
